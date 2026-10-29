@@ -48,7 +48,7 @@ export function AnniversaryCakes() {
           </RevealItem>
           <RevealItem>
             <h2 id="anniversary-title" className="type-display-lg mt-4 lg:mt-5">
-              Anniversary Cakes
+              Anniversary & Wedding Cakes
             </h2>
           </RevealItem>
           <RevealItem>

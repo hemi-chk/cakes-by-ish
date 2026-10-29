@@ -1,6 +1,7 @@
 import { AnniversaryCakes } from "@/components/home/anniversary-cakes";
 import { BirthdayCakes } from "@/components/home/birthday-cakes";
 import { Hero } from "@/components/home/hero";
+import { HalloweenGhost, HalloweenPopup } from "@/components/seasonal/halloween";
 
 // Homepage — sections from DESIGN_SPEC.md §6 are added one step at a time.
 const upcoming = [
@@ -12,6 +13,8 @@ const upcoming = [
 export default function HomePage() {
   return (
     <>
+      <HalloweenGhost />
+      <HalloweenPopup />
       <Hero />
       <BirthdayCakes />
       <AnniversaryCakes />

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { RevealGroup, RevealItem } from "@/components/motion/reveal";
+import { HalloweenCobwebs } from "@/components/seasonal/halloween";
 import { Button } from "@/components/ui/button";
 import { site } from "@/config/site";
 
@@ -33,6 +34,8 @@ export function Hero() {
       >
         <Image src="/images/hero-pour-bg.jpg" alt="" fill priority sizes="(min-width: 1024px) 100vw, 230vw" className="object-fill" />
       </div>
+
+      <HalloweenCobwebs />
 
       <div className="flex h-full flex-col gap-10 px-5 pt-10 pb-14 lg:mx-auto lg:max-w-[1500px] lg:flex-row lg:items-center lg:justify-between lg:gap-12 lg:px-[min(5.5vw,80px)] lg:py-0">
         {/* Copy, sitting on the pour */}

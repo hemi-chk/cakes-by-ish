@@ -262,6 +262,12 @@
 
   html {
     scroll-behavior: smooth;
+    /* Height of the announcement bar above the nav (0 when there's no announcement). */
+    --banner-h: 0px;
+  }
+
+  html:has([data-announcement]) {
+    --banner-h: 40px;
   }
 
   body {

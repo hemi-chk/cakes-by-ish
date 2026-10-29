@@ -62,15 +62,15 @@ export function RevealDrip({ children, className }: Props) {
   );
 }
 
-/** Photo frames — §8: opacity 0 → 1, scale 0.98 → 1, 600ms, once. */
-export function RevealPhoto({ children, className, delay = 0 }: Props & { delay?: number }) {
+/** Photo frames — §8: opacity 0 → 1, scale 0.98 → 1, 600ms, once. `amount` is how much must be visible first (lower it for cards that peek in from a scroll row). */
+export function RevealPhoto({ children, className, delay = 0, amount = 0.3 }: Props & { delay?: number; amount?: number }) {
   return (
     <MotionConfig reducedMotion="user">
       <motion.div
         className={className}
         initial={{ opacity: 0, scale: 0.98 }}
         whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount }}
         transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
       >
         {children}

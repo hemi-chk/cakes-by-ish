@@ -42,3 +42,8 @@ next-env.d.ts
 
 # local screenshots (scripts/screenshot.mjs)
 /screenshots
+
+# cloudflare / opennext
+/.open-next
+/.wrangler
+.dev.vars*

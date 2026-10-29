@@ -60,14 +60,14 @@ export function Hero() {
           </RevealItem>
         </RevealGroup>
 
-        {/* Baker photo in an arched white-chocolate frame */}
-        <div className="relative mx-auto aspect-[475/765] w-[min(78vw,360px)] shrink-0 overflow-hidden rounded-[999px_999px_10px_10px] border-[8px] border-white-choc shadow-photo lg:mx-0 lg:h-[84%] lg:w-auto">
+        {/* Baker photo in an arched white-chocolate frame: 90% of the Hero's height, capped at 42vw wide so it never squeezes the copy */}
+        <div className="relative mx-auto aspect-[520/760] w-[min(86vw,420px)] shrink-0 overflow-hidden rounded-[999px_999px_10px_10px] border-[8px] border-white-choc shadow-photo lg:mx-0 lg:w-[min(calc(var(--hero-h)*0.9*0.684),42vw)]">
           <Image
             src="/images/hero-baker.jpg"
             alt={`${site.owner} piping pink icing onto a drip cake in her kitchen, surrounded by finished birthday cakes`}
             fill
             priority
-            sizes="(min-width: 1024px) 34vw, 78vw"
+            sizes="(min-width: 1024px) 42vw, 86vw"
             className="object-cover object-[62%_50%]"
           />
         </div>

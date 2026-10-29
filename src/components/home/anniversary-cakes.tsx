@@ -53,8 +53,8 @@ export function AnniversaryCakes() {
           </RevealItem>
           <RevealItem>
             <p className="type-body-lg mt-4 leading-[1.45] text-cocoa-body lg:mt-5">
-              Every year together is worth celebrating. Whether it&apos;s your first or your fiftieth, we&apos;ll bake a
-              cake as personal as your story, with your names, your dates and the flavours you both love.
+              For all the years you&apos;ve loved, and all the memories yet to come. Celebrate your forever with a
+              lovingly crafted anniversary cake, made to sweeten the moments that make your love story uniquely yours.
             </p>
           </RevealItem>
         </RevealGroup>

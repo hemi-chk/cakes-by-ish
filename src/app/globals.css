@@ -149,7 +149,8 @@
   font-size: 44px;
   line-height: 1.02;
   @media (width >= 64rem) {
-    font-size: 72px;
+    /* Grows with the window: 5% of its width or 8.5% of its height, whichever is smaller, 48–72px */
+    font-size: clamp(48px, min(5vw, 8.5svh), 72px);
   }
 }
 

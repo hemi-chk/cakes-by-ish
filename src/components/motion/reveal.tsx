@@ -44,6 +44,24 @@ export function RevealItem({ children, className }: Props) {
   );
 }
 
+/** Anniversary drips — §8: scaleY 0.6 → 1 from the top, 700ms, once, when 30% of the section is visible. */
+export function RevealDrip({ children, className }: Props) {
+  return (
+    <MotionConfig reducedMotion="user">
+      <motion.div
+        className={className}
+        style={{ transformOrigin: "top" }}
+        initial={{ scaleY: 0.6 }}
+        whileInView={{ scaleY: 1 }}
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      >
+        {children}
+      </motion.div>
+    </MotionConfig>
+  );
+}
+
 /** Photo frames — §8: opacity 0 → 1, scale 0.98 → 1, 600ms, once. */
 export function RevealPhoto({ children, className, delay = 0 }: Props & { delay?: number }) {
   return (

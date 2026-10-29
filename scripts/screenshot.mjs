@@ -38,7 +38,10 @@ try {
     }
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForLoadState("networkidle");
-    await page.evaluate(() => Promise.all([...document.images].map((img) => img.decode().catch(() => {}))));
+    // Skip images hidden at this size (e.g. a mobile-only variant): lazy ones never load, so decode() never settles.
+    await page.evaluate(() =>
+      Promise.all([...document.images].filter((img) => img.checkVisibility()).map((img) => img.decode().catch(() => {}))),
+    );
     await page.waitForTimeout(900);
 
     const tag = `${width}x${height}`;

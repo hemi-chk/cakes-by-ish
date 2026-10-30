@@ -11,11 +11,11 @@ export const site = {
     url: "https://www.instagram.com/cakesby_ish/",
   },
   facebookUrl: "[Facebook page URL]",
-  email: "[Email address]",
+  email: "ishaniphy@yahoo.com",
   whatsapp: {
-    display: "[WhatsApp number]",
+    display: "+44 7792 607251",
     // International format, digits only, e.g. "447700900123".
-    number: "",
+    number: "447792607251",
     message: "Hi Ish! I'd like to order a cake.",
   },
 } as const;

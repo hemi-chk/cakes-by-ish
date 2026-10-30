@@ -1,7 +1,8 @@
 import Link from "next/link";
 
 import { Logo } from "@/components/brand/logo";
-import { mainNav, site } from "@/config/site";
+import { WhatsAppIcon } from "@/components/brand/social-icons";
+import { mainNav, site, whatsappUrl } from "@/config/site";
 
 const darkFocus = "focus-visible:outline-footer-text";
 
@@ -39,8 +40,21 @@ export function SiteFooter() {
           >
             {site.instagram.handle}
           </a>
-          <span className="lg:mt-1">{site.email}</span>
-          <span className="lg:mt-1">{site.whatsapp.display}</span>
+          <a
+            href={`mailto:${site.email}`}
+            className={`inline-flex min-h-11 items-center underline-offset-4 hover:text-footer-link hover:underline lg:mt-1 lg:min-h-0 ${darkFocus}`}
+          >
+            {site.email}
+          </a>
+          <a
+            href={whatsappUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`inline-flex min-h-11 items-center gap-2 underline-offset-4 hover:text-footer-link hover:underline lg:mt-1 lg:min-h-0 ${darkFocus}`}
+          >
+            <WhatsAppIcon className="size-4" />
+            {site.whatsapp.display}
+          </a>
         </address>
       </div>
 

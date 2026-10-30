@@ -7,6 +7,13 @@ const nextConfig: NextConfig = {
   // public/images are already resized and compressed by `pnpm images`, so serve them as-is for now.
   // TODO before launch: switch to Cloudflare Images for AVIF/WebP and per-device sizes.
   images: { unoptimized: true },
+  // Pages that aren't built yet show a "Coming soon" page. Remove each line once its page exists.
+  // Temporary (307) so browsers don't remember them.
+  async redirects() {
+    return ["/cakes", "/cakes/:path*", "/cupcakes", "/custom-cakes", "/sign-in", "/cart", "/privacy"].map(
+      (source) => ({ source, destination: "/coming-soon", permanent: false }),
+    );
+  },
   turbopack: {
     rules: {
       "*.css": {

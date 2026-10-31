@@ -10,7 +10,7 @@ export const site = {
     handle: "@Cakesby_Ish",
     url: "https://www.instagram.com/cakesby_ish/",
   },
-  facebookUrl: "[Facebook page URL]",
+  facebookUrl: "https://www.facebook.com/share/1C8r8qhWpY/",
   email: "ishaniphy@yahoo.com",
   whatsapp: {
     display: "+44 7792 607251",

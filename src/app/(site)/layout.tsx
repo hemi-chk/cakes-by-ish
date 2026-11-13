@@ -1,5 +1,6 @@
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { ChristmasSnow } from "@/components/seasonal/christmas";
 
 export default function SiteLayout({ children }: LayoutProps<"/">) {
   return (
@@ -15,6 +16,7 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
         {children}
       </main>
       <SiteFooter />
+      <ChristmasSnow />
     </>
   );
 }

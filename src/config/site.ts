@@ -16,7 +16,7 @@ export const site = {
     display: "+44 7792 607251",
     // International format, digits only, e.g. "447700900123".
     number: "447792607251",
-    message: "Hi Ish! I'd like to order a cake.",
+    message: "Hi Ishani! I'd like to order a cake.",
   },
 } as const;
 

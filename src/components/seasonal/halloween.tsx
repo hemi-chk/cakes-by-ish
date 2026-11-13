@@ -1,23 +1,13 @@
 "use client";
 
-import { ChevronRight, X } from "lucide-react";
-import { AnimatePresence, MotionConfig, motion, useReducedMotion } from "motion/react";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
 
 import { halloween } from "@/config/seasonal";
 
-/** True in the browser while Halloween is on (or previewed with `?halloween=1`). False on the server, so nothing prerenders. */
-function useHalloween() {
-  const [on, setOn] = useState(false);
-  useEffect(() => {
-    const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/London" }).format(new Date()).slice(5);
-    const preview = new URLSearchParams(window.location.search).get("halloween") === "1";
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- the date is only known in the browser
-    setOn(preview || (halloween.from <= today && today <= halloween.to));
-  }, []);
-  return on;
-}
+import { SeasonalPopup } from "./seasonal-popup";
+import { useSeason } from "./use-season";
+
+const useHalloween = () => useSeason(halloween, "halloween");
 
 // Cobweb drawn from the top-left corner: radial threads, joined by rings that sag towards the corner.
 const ANGLES = [0, 15, 30, 45, 60, 75, 90].map((d) => (d * Math.PI) / 180);
@@ -124,77 +114,17 @@ export function HalloweenGhost() {
   );
 }
 
-const DISMISSED_KEY = "halloween-popup-dismissed";
-
-/**
- * Card that slides down from the top shortly after the site opens. Once closed it stays closed for the
- * rest of the visit (sessionStorage). It doesn't take focus; Escape closes it too.
- */
+/** Slide-down Halloween message (see SeasonalPopup). */
 export function HalloweenPopup() {
-  const on = useHalloween();
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    if (!on) return;
-    let dismissed = false;
-    try {
-      dismissed = sessionStorage.getItem(DISMISSED_KEY) === "1";
-    } catch {}
-    if (dismissed) return;
-    const timer = setTimeout(() => setOpen(true), 900);
-    return () => clearTimeout(timer);
-  }, [on]);
-
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
-
-  function close() {
-    setOpen(false);
-    try {
-      sessionStorage.setItem(DISMISSED_KEY, "1");
-    } catch {}
-  }
-
   return (
-    <MotionConfig reducedMotion="user">
-      <AnimatePresence>
-        {open && (
-          <motion.aside
-            aria-label="Halloween offer"
-            className="fixed inset-x-0 top-3 z-50 mx-auto flex w-[calc(100%-32px)] max-w-[460px] items-center gap-4 rounded-[10px] border border-line-strong bg-cream py-4 pr-3 pl-4 shadow-menu"
-            initial={{ y: "-140%", opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: "-140%", opacity: 0 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <Ghost sway className="w-11 shrink-0" />
-            <div className="min-w-0 flex-1">
-              <p className="type-title text-cocoa">It&apos;s Halloween!</p>
-              <p className="type-small mt-0.5 text-cocoa-body">Order a spooky themed&nbsp;cake&nbsp;🎃</p>
-              <Link
-                href="/custom-cakes"
-                onClick={close}
-                className="type-small mt-1.5 inline-flex min-h-11 items-center gap-1 font-medium text-rose-text underline underline-offset-4 hover:text-[#6E3540]"
-              >
-                Order a spooky cake
-                <ChevronRight aria-hidden="true" className="size-4" strokeWidth={1.8} />
-              </Link>
-            </div>
-            <button
-              type="button"
-              onClick={close}
-              aria-label="Close Halloween message"
-              className="flex size-11 shrink-0 items-center justify-center self-start rounded-full text-cocoa-soft transition-colors hover:bg-blush-mist hover:text-cocoa"
-            >
-              <X aria-hidden="true" className="size-5" strokeWidth={1.8} />
-            </button>
-          </motion.aside>
-        )}
-      </AnimatePresence>
-    </MotionConfig>
+    <SeasonalPopup
+      on={useHalloween()}
+      storageKey="halloween-popup-dismissed"
+      label="Halloween message"
+      icon={<Ghost sway className="w-11 shrink-0" />}
+      title="It's Halloween!"
+      text={<>Order a spooky themed&nbsp;cake&nbsp;🎃</>}
+      link={{ href: "/custom-cakes", label: "Order a spooky cake" }}
+    />
   );
 }

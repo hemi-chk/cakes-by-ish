@@ -10,7 +10,16 @@ Frontend first, then backend. Built step by step: small, reviewable steps, not e
 
 - Mock data must match the database schema below exactly (TypeScript types mirror the Drizzle tables).
 - All page data goes through one data-access layer (`src/lib/data/*`) that returns mock data now and D1 queries later, so pages don't change when the backend lands.
-- Forms use Zod schemas from day one (`src/lib/validation/*`), shared later with server actions.
+- Forms use Zod schemas from day one, shared with server actions.
+
+## Architecture: modular monolith
+
+One Next.js app, split by feature. Each module in `src/modules/<module>/` owns its tables (`schema.ts`), server logic (`server.ts` / actions), validation (`validation.ts`) and UI (`components/`). Modules talk to each other through their exported functions, never by querying another module's tables directly.
+
+- `src/modules/auth`: Better Auth config (`server.ts`: `getAuth`, `getSession`), browser client (`client.ts`), sign-in/register forms.
+- Later modules: `catalog` (cake types, cakes, cupcakes), `cart`, `orders`, `custom-requests`, `reviews`, `announcements`, `settings`, `notifications`.
+- Shared infrastructure: `src/server/db` (`getDb()` per request; `schema.ts` re-exports every module's tables for drizzle-kit). Shared UI stays in `src/components`.
+- Migrations: `pnpm db:generate` (drizzle-kit → `drizzle/`), `pnpm db:migrate:local` / `db:migrate:remote` (wrangler). After changing `wrangler.jsonc`, run `pnpm cf-typegen`. Local secrets live in `.dev.vars` (see `.dev.vars.example`).
 
 ## Tech stack
 
@@ -20,7 +29,7 @@ Frontend first, then backend. Built step by step: small, reviewable steps, not e
 | Hosting | Cloudflare Workers via @opennextjs/cloudflare |
 | Database | Cloudflare D1 (SQLite) with Drizzle ORM + drizzle-kit migrations |
 | File storage | Cloudflare R2: private bucket for payment slips and custom-request photos; cake images can be public |
-| Auth | Auth.js (credentials: email + password), role field on user: customer or admin |
+| Auth | Better Auth (email + password and Google sign-in), Drizzle adapter, role field on user: customer or admin |
 | Styling | Tailwind CSS v4 + shadcn/ui, tokens in `src/app/globals.css` |
 | Motion | Motion (`motion/react`) |
 | Email | Resend |
@@ -85,7 +94,7 @@ Keep in `src/config/business.ts` so they are easy to change.
 
 ## Data model (Drizzle, D1)
 
-- users: id, name, email (unique), phone, password_hash, role, created_at
+- users: id, name, email (unique), email_verified, image, phone, role, created_at, updated_at (passwords live in Better Auth's `accounts` table, provider "credential"; plus `sessions` and `verifications`)
 - cake_types: id, name, description, image_key, display_order
 - cakes: id, cake_type_id, name, description, price, image_keys, available, featured
 - cupcake_types: id, name, description, price, image_key, available

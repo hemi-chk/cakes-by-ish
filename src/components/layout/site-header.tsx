@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Menu, ShoppingBag } from "lucide-react";
 
 import { Logo } from "@/components/brand/logo";
@@ -10,10 +10,14 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { mainNav } from "@/config/site";
 import { cn } from "@/lib/utils";
+import { signOut, useSession } from "@/modules/auth/client";
 
 /** Main navigation bar — DESIGN_SPEC.md §5.2. Shrinks from 84px to 64px once the page scrolls. */
 export function SiteHeader() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { data: session, isPending } = useSession();
+  const firstName = session?.user.name.split(" ")[0];
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -22,6 +26,14 @@ export function SiteHeader() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  async function onSignOut() {
+    await signOut();
+    router.refresh();
+  }
+
+  // Sign-in link that brings the visitor back to this page afterwards
+  const signInHref = pathname === "/" || pathname === "/sign-in" ? "/sign-in" : `/sign-in?next=${encodeURIComponent(pathname)}`;
 
   const isActive = (href: string) => (href === "/" ? pathname === "/" : !href.includes("#") && pathname.startsWith(href));
 
@@ -60,12 +72,26 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
-          <Link
-            href="/sign-in"
-            className="inline-flex min-h-11 items-center rounded-[4px] px-3 py-2 text-sm text-cocoa transition-colors hover:text-rose-text"
-          >
-            Sign in
-          </Link>
+          {/* Nothing until the session is known, so the link doesn't flash "Sign in" for signed-in visitors */}
+          {isPending ? null : session ? (
+            <>
+              <span className="px-1 text-sm text-cocoa-body">Hi, {firstName}</span>
+              <button
+                type="button"
+                onClick={onSignOut}
+                className="inline-flex min-h-11 items-center rounded-[4px] px-3 py-2 text-sm text-cocoa underline-offset-4 transition-colors hover:text-rose-text hover:underline"
+              >
+                Sign out
+              </button>
+            </>
+          ) : (
+            <Link
+              href={signInHref}
+              className="inline-flex min-h-11 items-center rounded-[4px] px-3 py-2 text-sm text-cocoa transition-colors hover:text-rose-text"
+            >
+              Sign in
+            </Link>
+          )}
           <Button asChild size="nav">
             <Link href="/cakes">Order now</Link>
           </Button>
@@ -107,13 +133,21 @@ export function SiteHeader() {
                       </li>
                     );
                   })}
-                  <li>
-                    <SheetClose asChild>
-                      <Link href="/sign-in" className="flex h-14 items-center text-base text-cocoa">
-                        Sign in
-                      </Link>
-                    </SheetClose>
-                  </li>
+                  {!isPending && (
+                    <li>
+                      <SheetClose asChild>
+                        {session ? (
+                          <button type="button" onClick={onSignOut} className="flex h-14 w-full items-center text-base text-cocoa">
+                            Sign out ({firstName})
+                          </button>
+                        ) : (
+                          <Link href={signInHref} className="flex h-14 items-center text-base text-cocoa">
+                            Sign in
+                          </Link>
+                        )}
+                      </SheetClose>
+                    </li>
+                  )}
                 </ul>
               </nav>
               <SheetClose asChild>

@@ -3,4 +3,4 @@
 // Add `?halloween=1` or `?christmas=1` to the URL to preview outside the dates.
 
 export const halloween = { from: "10-01", to: "10-31" };
-export const christmas = { from: "12-01", to: "12-31" };
+export const christmas = { from: "11-14", to: "12-31" };
